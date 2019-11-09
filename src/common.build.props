@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	  <Authors>xPike Committers</Authors>
+    <Company>xPike Project</Company>
+    <PackageIcon>xpike-pacakge-icon.png</PackageIcon>
+    <PackageProjectUrl>https://github.com/xpike/documentation/blob/master/docfx_project/index.md</PackageProjectUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\xpike-pacakge-icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>

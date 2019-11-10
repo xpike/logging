@@ -130,22 +130,6 @@ namespace XPike.Logging
             if (logEvent == null)
                 return false;
 
-            if (logEvent.Metadata == null)
-                logEvent.Metadata = new Dictionary<string, string>();
-
-            try
-            {
-                // NOTE: May want to invert this, so that items in logEvent.Metadata supersede items in TraceContext
-
-                var context = _contextAccessor.TraceContext;
-                if (context?.Items != null)
-                    foreach (var item in context.Items)
-                        logEvent.Metadata[item.Key] = item.Value;
-            }
-            catch
-            {
-            }
-
             if (logEvent.LogLevel >= _settings.LogLevel)
                 return _eventQueue.TryAdd(logEvent, _settings.EnqueueTimeoutMs);
 
@@ -183,21 +167,40 @@ namespace XPike.Logging
 
         /// <inheritdoc />
         public virtual LogEvent PopulateLogEvent(LogLevel logLevel,
-                                                 string message,
-                                                 Dictionary<string, string> metadata = null,
-                                                 Exception exception = null,
-                                                 string category = LogServiceDefaults.DEFAULT_CATEGORY,
-                                                 [CallerMemberName] string location = null) =>
-            new LogEvent
+            string message,
+            Dictionary<string, string> metadata = null,
+            Exception exception = null,
+            string category = LogServiceDefaults.DEFAULT_CATEGORY,
+            [CallerMemberName] string location = null)
+        {
+            var actualMetadata = new Dictionary<string, string>();
+
+            try
+            {
+                var context = _contextAccessor.TraceContext;
+                if (context?.Items != null)
+                    foreach (var item in context.Items)
+                        actualMetadata[item.Key] = item.Value;
+            }
+            catch
+            {
+            }
+
+            if (metadata != null)
+                foreach (var item in metadata)
+                    actualMetadata[item.Key] = item.Value;
+
+            return new LogEvent
             {
                 Exception = exception,
                 Location = location,
                 LogLevel = logLevel,
                 Message = message,
-                Metadata = metadata ?? new Dictionary<string, string>(),
+                Metadata = actualMetadata,
                 Category = category,
                 Timestamp = DateTime.UtcNow
             };
+        }
 
         /// <inheritdoc />
         public void Dispose()

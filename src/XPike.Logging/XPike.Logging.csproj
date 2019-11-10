@@ -9,4 +9,15 @@
     <PackageReference Include="XPike.Settings" Version="1.0.1" />
   </ItemGroup>
 
+  <!-- .NET Standard 2.0 references, compilation flags and build options -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETSTD</DefineConstants>
+  </PropertyGroup>
+
+
+  <!-- .NET 4.5 references, compilation flags and build options -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
+    <DefineConstants>NETFX</DefineConstants>
+  </PropertyGroup>
+
 </Project>

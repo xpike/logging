@@ -13,7 +13,7 @@ namespace XPike.Logging.Console
     {
         protected static SemaphoreSlim Semaphore { get; }
 
-        private readonly ConsoleLogSettings _settings;
+        protected virtual ConsoleLogSettings Settings { get; set; }
 
         static ConsoleLogProvider()
         {
@@ -22,7 +22,7 @@ namespace XPike.Logging.Console
 
         public ConsoleLogProvider(IConfigurationService configService)
         {
-            _settings = configService.GetValueOrDefault($"XPike.Logging::{nameof(ConsoleLogSettings)}",
+            Settings = configService.GetValueOrDefault($"XPike.Logging::{nameof(ConsoleLogSettings)}",
                 new ConsoleLogSettings
                 {
                     ShowMetadata = true,
@@ -41,11 +41,11 @@ namespace XPike.Logging.Console
             {
                 sb.Append($"\r\n\tException Details: {logEvent.Exception.Message} ({logEvent.Exception.GetType().Name})");
 
-                if (_settings.ShowStackTraces)
+                if (Settings.ShowStackTraces)
                     sb.Append($"\r\nStack Trace:\r\n{logEvent.Exception}");
             }
 
-            if (logEvent.Metadata?.Any() ?? false && _settings.ShowMetadata)
+            if ((logEvent.Metadata?.Any() ?? false) && Settings.ShowMetadata)
             {
                 sb.Append("\r\n----------------------------------------");
 
@@ -64,7 +64,7 @@ namespace XPike.Logging.Console
 
             try
             {
-                if (!_settings.Enabled)
+                if (!Settings.Enabled)
                     return true;
 
                 var message = ConstructMessage(logEvent);

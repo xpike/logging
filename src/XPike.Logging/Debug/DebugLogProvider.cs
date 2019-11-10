@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using XPike.Configuration;
 using XPike.Logging.Console;
@@ -11,12 +10,22 @@ namespace XPike.Logging.Debug
         : ConsoleLogProvider,
           IDebugLogProvider
     {
-        private readonly DebugLogSettings _settings;
+        private DebugLogSettings _settings;
+
+        protected new DebugLogSettings Settings
+        {
+            get => _settings;
+            set
+            {
+                _settings = value;
+                base.Settings = value;
+            }
+        }
 
         public DebugLogProvider(IConfigurationService configService)
             : base(configService)
         {
-            _settings = configService.GetValueOrDefault($"XPike.Logging::{nameof(DebugLogSettings)}",
+            base.Settings = Settings = configService.GetValueOrDefault($"XPike.Logging::{nameof(DebugLogSettings)}",
                 new DebugLogSettings
                 {
                     Enabled = false,
@@ -31,7 +40,7 @@ namespace XPike.Logging.Debug
 
             try
             {
-                if (!_settings.Enabled || !System.Diagnostics.Debugger.IsAttached)
+                if (!Settings.Enabled || !System.Diagnostics.Debugger.IsAttached)
                     return true;
 
                 var message = ConstructMessage(logEvent);

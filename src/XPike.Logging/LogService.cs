@@ -14,10 +14,13 @@ namespace XPike.Logging
     {
         private readonly IList<ILogProvider> _providers;
         private readonly LogServiceSettings _settings;
+        private readonly ITraceContextAccessor _contextAccessor;
 
         private BlockingCollection<LogEvent> _eventQueue;
 
-        public LogService(IEnumerable<ILogProvider> providers, ISettingsManager<LogServiceSettings> settingsManager)
+        public LogService(IEnumerable<ILogProvider> providers, 
+            ISettingsManager<LogServiceSettings> settingsManager,
+            ITraceContextAccessor contextAccessor)
         {
             _settings = settingsManager.GetSettingsOrDefault(new LogServiceSettings
             {
@@ -28,6 +31,7 @@ namespace XPike.Logging
 
             _providers = providers.ToList();
             _eventQueue = new BlockingCollection<LogEvent>();
+            _contextAccessor = contextAccessor;
 
             // NOTE: Intentional fire-and-forget.
             Task.Run(() => QueueProcessorAsync());
@@ -108,6 +112,19 @@ namespace XPike.Logging
 
             if (logEvent.Metadata == null)
                 logEvent.Metadata = new Dictionary<string, string>();
+
+            try
+            {
+                // NOTE: May want to invert this, so that items in logEvent.Metadata supersede items in TraceContext
+
+                var context = _contextAccessor.TraceContext;
+                if (context?.Items != null)
+                    foreach (var item in context.Items)
+                        logEvent.Metadata[item.Key] = item.Value;
+            }
+            catch
+            {
+            }
 
             if (logEvent.LogLevel >= _settings.LogLevel)
                 return _eventQueue.TryAdd(logEvent, _settings.EnqueueTimeoutMs);

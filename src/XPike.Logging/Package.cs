@@ -1,7 +1,6 @@
 ﻿using XPike.IoC;
 using XPike.Logging.Console;
 using XPike.Logging.Debug;
-using XPike.Logging.Failover;
 using XPike.Logging.File;
 
 namespace XPike.Logging
@@ -25,6 +24,12 @@ namespace XPike.Logging
 
             dependencyCollection.RegisterSingleton<ILogService, LogService>();
             dependencyCollection.RegisterSingletonFallback(typeof(ILog<>), typeof(LogWriter<>));
+
+            dependencyCollection.RegisterSingleton<ITraceContextProvider, TraceContextProvider>();
+            dependencyCollection.RegisterSingleton<ITraceContextAccessor, TraceContextAccessor>();
+            
+            dependencyCollection.RegisterScoped<ITraceContext>(services =>
+                services.ResolveDependency<ITraceContextAccessor>().TraceContext);
         }
     }
 }

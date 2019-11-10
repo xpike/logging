@@ -17,7 +17,10 @@ namespace XPikeLogging
                 .ConfigureLogging(builder => { builder.UseXPikeLogging(); }) // NOTE: Call AddXPikeLogging() to preserve any configured NetCore providers.
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
+                    webBuilder
+                        //.ConfigureAppConfiguration(builder =>
+                        //    builder.ConfigureXPikeConfiguration(xpike => { }))
+                        .UseStartup<Startup>()
                         .AddXPikeConfiguration(builder => { });
                 });
     }

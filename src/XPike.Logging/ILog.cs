@@ -4,6 +4,13 @@ using System.Runtime.CompilerServices;
 
 namespace XPike.Logging
 {
+    /// <summary>
+    /// Interface implemented by LogWriters.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the source. Typically this is your service. The fully qualified type name of TSource is used as the logging category.</typeparam>
+    /// <remarks>
+    /// This is the interface you will typically inject into your services. 
+    /// </remarks>
     public interface ILog<TSource>
         where TSource : class
     {

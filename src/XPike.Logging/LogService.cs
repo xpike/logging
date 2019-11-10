@@ -8,6 +8,13 @@ using XPike.Settings;
 
 namespace XPike.Logging
 {
+    /// <summary>
+    /// Dedfault LogService implementation.
+    /// Implements the <see cref="XPike.Logging.ILogService" />
+    /// Implements the <see cref="System.IDisposable" />
+    /// </summary>
+    /// <seealso cref="XPike.Logging.ILogService" />
+    /// <seealso cref="System.IDisposable" />
     public class LogService
         : ILogService,
           IDisposable
@@ -18,6 +25,12 @@ namespace XPike.Logging
 
         private BlockingCollection<LogEvent> _eventQueue;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogService"/> class.
+        /// </summary>
+        /// <param name="providers">The providers.</param>
+        /// <param name="settingsManager">The settings manager.</param>
+        /// <param name="contextAccessor">The trace context accessor.</param>
         public LogService(IEnumerable<ILogProvider> providers, 
             ISettingsManager<LogServiceSettings> settingsManager,
             ITraceContextAccessor contextAccessor)
@@ -37,6 +50,7 @@ namespace XPike.Logging
             Task.Run(() => QueueProcessorAsync());
         }
 
+        /// <inheritdoc />
         public virtual bool Debug(string message,
                                   Dictionary<string, string> metadata = null,
                                   string category = LogServiceDefaults.DEFAULT_CATEGORY,
@@ -48,6 +62,7 @@ namespace XPike.Logging
                 category,
                 location);
 
+        /// <inheritdoc />
         public virtual bool Error(string message,
                                   Exception exception = null,
                                   Dictionary<string, string> metadata = null,
@@ -60,6 +75,7 @@ namespace XPike.Logging
                 category,
                 location);
 
+        /// <inheritdoc />
         public virtual bool Info(string message,
                                  Dictionary<string, string> metadata = null,
                                  string category = LogServiceDefaults.DEFAULT_CATEGORY,
@@ -71,6 +87,7 @@ namespace XPike.Logging
                 category,
                 location);
 
+        /// <inheritdoc />
         public virtual bool Log(string message,
                                 Dictionary<string, string> metadata = null,
                                 string category = LogServiceDefaults.DEFAULT_CATEGORY,
@@ -82,6 +99,7 @@ namespace XPike.Logging
                   category,
                   location);
 
+        /// <inheritdoc />
         public virtual bool Trace(string message,
                                   Dictionary<string, string> metadata = null,
                                   string category = LogServiceDefaults.DEFAULT_CATEGORY,
@@ -93,6 +111,7 @@ namespace XPike.Logging
                   category,
                   location);
 
+        /// <inheritdoc />
         public virtual bool Warn(string message,
                                  Exception exception = null,
                                  Dictionary<string, string> metadata = null,
@@ -105,6 +124,7 @@ namespace XPike.Logging
                   category,
                   location);
 
+        /// <inheritdoc />
         public virtual bool Write(LogEvent logEvent)
         {
             if (logEvent == null)
@@ -132,12 +152,14 @@ namespace XPike.Logging
             return true;
         }
 
+        /// <inheritdoc />
         public virtual async Task QueueProcessorAsync()
         {
             foreach (var ev in _eventQueue.GetConsumingEnumerable())
                 await WriteAsync(ev);
         }
 
+        /// <inheritdoc />
         public bool Write(LogLevel logLevel,
                           string message,
                           Dictionary<string, string> metadata = null,
@@ -146,9 +168,11 @@ namespace XPike.Logging
                           [CallerMemberName] string location = null) =>
             Write(PopulateLogEvent(logLevel, message, metadata, exception, category, location));
 
+        /// <inheritdoc />
         public virtual async Task<bool> WriteAsync(LogEvent logEvent) =>
             (await Task.WhenAll(_providers.Select(x => x.WriteAsync(logEvent)))).All(x => x);
 
+        /// <inheritdoc />
         public virtual Task<bool> WriteAsync(LogLevel logLevel,
                                              string message,
                                              Dictionary<string, string> metadata = null,
@@ -157,6 +181,7 @@ namespace XPike.Logging
                                              [CallerMemberName] string location = null) =>
             WriteAsync(PopulateLogEvent(logLevel, message, metadata, exception, category, location));
 
+        /// <inheritdoc />
         public virtual LogEvent PopulateLogEvent(LogLevel logLevel,
                                                  string message,
                                                  Dictionary<string, string> metadata = null,
@@ -174,15 +199,23 @@ namespace XPike.Logging
                 Timestamp = DateTime.UtcNow
             };
 
+        /// <inheritdoc />
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="LogService"/> class.
+        /// </summary>
         ~LogService() =>
             Dispose(false);
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected virtual void Dispose(bool disposing)
         {
             if (_eventQueue != null)

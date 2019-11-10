@@ -5,9 +5,14 @@
     <Company>xPike Project</Company>
     <PackageIcon>xpike-pacakge-icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/xpike/documentation/blob/master/docfx_project/index.md</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/xpike/logging</RepositoryUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageTags>xPike;microservices;logging</PackageTags>
+    <PackageReleaseNotes>https://github.com/xpike/logging/blob/master/CHANGELOG.md</PackageReleaseNotes>    
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\xpike-pacakge-icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">

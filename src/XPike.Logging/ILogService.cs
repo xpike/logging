@@ -26,6 +26,7 @@ namespace XPike.Logging
         /// <param name="message"></param>
         /// <param name="metadata"></param>
         /// <param name="exception"></param>
+        /// <param name="category"></param>
         /// <param name="location"></param>
         bool Write(LogLevel logLevel,
                    string message,

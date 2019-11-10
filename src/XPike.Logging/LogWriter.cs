@@ -4,6 +4,12 @@ using System.Runtime.CompilerServices;
 
 namespace XPike.Logging
 {
+    /// <summary>
+    /// Default LogWriter implementation.
+    /// Implements the <see cref="XPike.Logging.ILog{TSource}" />
+    /// </summary>
+    /// <typeparam name="TSource">The type of the t source.</typeparam>
+    /// <seealso cref="XPike.Logging.ILog{TSource}" />
     public class LogWriter<TSource>
         : ILog<TSource>
         where TSource : class
@@ -11,12 +17,17 @@ namespace XPike.Logging
         private readonly ILogService _logService;
         private readonly string _source;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogWriter{TSource}"/> class.
+        /// </summary>
+        /// <param name="logService">The log service.</param>
         public LogWriter(ILogService logService)
         {
             _logService = logService;
             _source = typeof(TSource).FullName;
         }
 
+        /// <inheritdoc />
         public virtual bool Debug(string message,
                                   Dictionary<string, string> metadata = null,
                                   [CallerMemberName] string location = null) =>
@@ -25,6 +36,7 @@ namespace XPike.Logging
                               _source,
                               location);
 
+        /// <inheritdoc />
         public virtual bool Error(string message,
                                   Exception exception = null,
                                   Dictionary<string, string> metadata = null,
@@ -35,6 +47,7 @@ namespace XPike.Logging
                               _source,
                               location);
 
+        /// <inheritdoc />
         public virtual bool Info(string message,
                                  Dictionary<string, string> metadata = null,
                                  [CallerMemberName] string location = null) =>
@@ -43,6 +56,7 @@ namespace XPike.Logging
                              _source,
                              location);
 
+        /// <inheritdoc />
         public virtual bool Log(string message,
                                 Dictionary<string, string> metadata = null,
                                 [CallerMemberName] string location = null) =>
@@ -51,6 +65,7 @@ namespace XPike.Logging
                             _source,
                             location);
 
+        /// <inheritdoc />
         public virtual bool Trace(string message,
                                   Dictionary<string, string> metadata = null,
                                   [CallerMemberName] string location = null) =>
@@ -59,6 +74,7 @@ namespace XPike.Logging
                               _source,
                               location);
 
+        /// <inheritdoc />
         public virtual bool Warn(string message,
                                  Exception exception = null,
                                  Dictionary<string, string> metadata = null,
@@ -69,6 +85,7 @@ namespace XPike.Logging
                              _source,
                              location);
 
+        /// <inheritdoc />
         public virtual bool Write(LogEvent logEvent)
         {
             if (logEvent == null)
@@ -79,6 +96,7 @@ namespace XPike.Logging
             return _logService.Write(logEvent);
         }
 
+        /// <inheritdoc />
         public bool Write(LogLevel logLevel,
                           string message,
                           Dictionary<string, string> metadata = null,

@@ -5,10 +5,6 @@
     <Description>xPike Logging System</Description>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="XPike.Settings" Version="1.0.1" />
-  </ItemGroup>
-
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <DefineConstants>NETSTD</DefineConstants>
@@ -19,5 +15,8 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
     <DefineConstants>NETFX</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="XPike.Configuration" Version="1.1.0" />
+  </ItemGroup>
 
 </Project>

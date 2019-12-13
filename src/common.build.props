@@ -3,7 +3,7 @@
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
 	  <Authors>xPike Committers</Authors>
     <Company>xPike Project</Company>
-    <PackageIcon>xpike-pacakge-icon.png</PackageIcon>
+    <PackageIcon>xpike-package-icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/xpike/documentation/blob/master/docfx_project/index.md</PackageProjectUrl>
     <RepositoryUrl>https://github.com/xpike/logging</RepositoryUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -11,7 +11,7 @@
     <PackageReleaseNotes>https://github.com/xpike/logging/blob/master/CHANGELOG.md</PackageReleaseNotes>    
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\..\xpike-pacakge-icon.png" Pack="true" PackagePath="\" />
+    <None Include="..\..\xpike-package-icon.png" Pack="true" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>

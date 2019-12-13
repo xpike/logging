@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using XPike.Settings;
+using XPike.Configuration;
 
 namespace XPike.Logging
 {
@@ -19,8 +19,8 @@ namespace XPike.Logging
         : ILogService,
           IDisposable
     {
+        private readonly IConfig<LogServiceConfig> _config;
         private readonly IList<ILogProvider> _providers;
-        private readonly LogServiceSettings _settings;
         private readonly ITraceContextAccessor _contextAccessor;
 
         private BlockingCollection<LogEvent> _eventQueue;
@@ -29,25 +29,25 @@ namespace XPike.Logging
         /// Initializes a new instance of the <see cref="LogService"/> class.
         /// </summary>
         /// <param name="providers">The providers.</param>
-        /// <param name="settingsManager">The settings manager.</param>
+        /// <param name="configManager">The settings manager.</param>
         /// <param name="contextAccessor">The trace context accessor.</param>
-        public LogService(IEnumerable<ILogProvider> providers, 
-            ISettingsManager<LogServiceSettings> settingsManager,
+        public LogService(IEnumerable<ILogProvider> providers,
+            IConfigManager<LogServiceConfig> configManager,
             ITraceContextAccessor contextAccessor)
         {
-            _settings = settingsManager.GetSettingsOrDefault(new LogServiceSettings
+            _config = configManager.GetConfigOrDefault(new LogServiceConfig
             {
                 MaxQueueLength = 5000,
                 EnqueueTimeoutMs = 10,
                 LogLevel = LogLevel.Log
-            }).Value;
+            });
 
             _providers = providers.ToList();
             _eventQueue = new BlockingCollection<LogEvent>();
             _contextAccessor = contextAccessor;
 
             // NOTE: Intentional fire-and-forget.
-            Task.Run(() => QueueProcessorAsync());
+            _ = Task.Run(async () => await QueueProcessorAsync().ConfigureAwait(false));
         }
 
         /// <inheritdoc />
@@ -130,8 +130,8 @@ namespace XPike.Logging
             if (logEvent == null)
                 return false;
 
-            if (logEvent.LogLevel >= _settings.LogLevel)
-                return _eventQueue.TryAdd(logEvent, _settings.EnqueueTimeoutMs);
+            if (logEvent.LogLevel <= _config.CurrentValue.LogLevel)
+                return _eventQueue.TryAdd(logEvent, _config.CurrentValue.EnqueueTimeoutMs);
 
             return true;
         }
@@ -140,7 +140,7 @@ namespace XPike.Logging
         public virtual async Task QueueProcessorAsync()
         {
             foreach (var ev in _eventQueue.GetConsumingEnumerable())
-                await WriteAsync(ev);
+                await WriteAsync(ev).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
@@ -154,7 +154,7 @@ namespace XPike.Logging
 
         /// <inheritdoc />
         public virtual async Task<bool> WriteAsync(LogEvent logEvent) =>
-            (await Task.WhenAll(_providers.Select(x => x.WriteAsync(logEvent)))).All(x => x);
+            (await Task.WhenAll(_providers.Select(x => x.WriteAsync(logEvent))).ConfigureAwait(false)).All(x => x);
 
         /// <inheritdoc />
         public virtual Task<bool> WriteAsync(LogLevel logLevel,

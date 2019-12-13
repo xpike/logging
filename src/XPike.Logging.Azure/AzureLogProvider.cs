@@ -1,23 +1,26 @@
-﻿using Microsoft.ApplicationInsights;
+﻿using System;
+using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XPike.Configuration;
-using XPike.Settings;
 
 namespace XPike.Logging.Azure
 {
     public class AzureLogProvider
-        : IAzureLogProvider
+        : IAzureLogProvider,
+          IDisposable
     {
-        private readonly AzureLogSettings _settings;
-        private readonly TelemetryClient _client;
+        private readonly IConfig<AzureLogConfig> _config;
 
-        public AzureLogProvider(IConfigurationService configService, ISettings<AzureLogSettings> settings)
+        private TelemetryConfiguration _telemetryConfig;
+        private TelemetryClient _client;
+
+        public AzureLogProvider(IConfig<AzureLogConfig> config)
         {
-            _settings = settings.Value;
-            _client = new TelemetryClient(new TelemetryConfiguration(_settings.InstrumentationKey));
+            _config = config;
+            _client = new TelemetryClient(_telemetryConfig = new TelemetryConfiguration(_config.CurrentValue.InstrumentationKey));
         }
 
         private void PopulateTelemetry(IDictionary<string, string> metadata, LogEvent logEvent)
@@ -51,6 +54,9 @@ namespace XPike.Logging.Azure
 
         public bool Write(LogEvent logEvent)
         {
+            if (_client == null)
+                return false;
+
             if (logEvent.Exception == null)
             {
                 var telemetry = new TraceTelemetry(logEvent.Message, GetSeverity(logEvent))
@@ -76,6 +82,23 @@ namespace XPike.Logging.Azure
 
                 _client.TrackException(telemetry);
                 return true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _client = null;
+
+                _telemetryConfig?.Dispose();
+                _telemetryConfig = null;
             }
         }
     }

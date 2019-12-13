@@ -3,7 +3,7 @@
     /// <summary>
     /// Settings for the LogService
     /// </summary>
-    public class LogServiceSettings
+    public class LogServiceConfig
     {
         /// <summary>
         /// Gets or sets the maximum length of the in-memory queue for asynchronous logging.

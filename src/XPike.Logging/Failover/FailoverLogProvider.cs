@@ -21,7 +21,7 @@ namespace XPike.Logging.Failover
         public async Task<bool> WriteAsync(LogEvent logEvent)
         {
             foreach(var provider in _providers)
-                if (await provider.WriteAsync(logEvent))
+                if (await provider.WriteAsync(logEvent).ConfigureAwait(false))
                     return true;
 
             return false;

@@ -10,28 +10,29 @@ namespace XPike.Logging.Debug
         : ConsoleLogProvider,
           IDebugLogProvider
     {
-        private DebugLogSettings _settings;
+        private readonly IConfigurationService _configService;
+        private IConfig<DebugLogConfig> _config;
 
-        protected new DebugLogSettings Settings
+        protected new IConfig<DebugLogConfig> Config
         {
-            get => _settings;
+            get => _config;
             set
             {
-                _settings = value;
-                base.Settings = value;
+                _config = value;
+                base.Config = new Config<ConsoleLogConfig>(value.ConfigurationKey, value.CurrentValue, _configService);
             }
         }
 
-        public DebugLogProvider(IConfigurationService configService)
-            : base(configService)
+        public DebugLogProvider(IConfigurationService configService, IConfigManager<DebugLogConfig> configManager)
         {
-            base.Settings = Settings = configService.GetValueOrDefault($"XPike.Logging::{nameof(DebugLogSettings)}",
-                new DebugLogSettings
-                {
-                    Enabled = false,
-                    ShowMetadata = false,
-                    ShowStackTraces = false
-                });
+            _configService = configService;
+
+            Config = configManager.GetConfigOrDefault(new DebugLogConfig
+            {
+                Enabled = false,
+                ShowMetadata = false,
+                ShowStackTraces = false
+            });
         }
 
         public override async Task<bool> WriteAsync(LogEvent logEvent)
@@ -40,12 +41,12 @@ namespace XPike.Logging.Debug
 
             try
             {
-                if (!Settings.Enabled || !System.Diagnostics.Debugger.IsAttached)
+                if (!Config.CurrentValue.Enabled || !System.Diagnostics.Debugger.IsAttached)
                     return true;
 
                 var message = ConstructMessage(logEvent);
 
-                await Semaphore.WaitAsync();
+                await Semaphore.WaitAsync().ConfigureAwait(false);
                 captured = true;
 
                 cons.WriteLine(message);

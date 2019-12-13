@@ -15,9 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6A2169E9
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
 		..\.gitignore = ..\.gitignore
-		..\azurepipelines.yml = ..\azurepipelines.yml
+		..\azure-pipelines.yml = ..\azure-pipelines.yml
 		common.build.props = common.build.props
-		multitarget.build.props = multitarget.build.props
 		..\xpike-pacakge-icon.png = ..\xpike-pacakge-icon.png
 	EndProjectSection
 EndProject
@@ -27,10 +26,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example.Library", "..\examp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netcore3", "netcore3", "{84F0E4FA-C5DD-49A1-913D-CDEBBB7F7770}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPikeLogging", "..\examples\netcore3\XPikeLogging\XPikeLogging.csproj", "{9F1B4BF0-FA61-457A-B5E0-975748B7DACE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPikeLogging", "..\examples\netcore3\XPikeLogging\XPikeLogging.csproj", "{9F1B4BF0-FA61-457A-B5E0-975748B7DACE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "README", "README", "{05E2105F-7F4D-40C4-8078-0C656CEC0DC1}"
 	ProjectSection(SolutionItems) = preProject
+		..\CHANGELOG.md = ..\CHANGELOG.md
 		..\LICENSE = ..\LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B7E3B55F-75A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{45F6A0AE-2BBD-4608-9ED8-7C1578E9650C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XPike.Logging.Tests", "..\tests\XPike.Logging.Tests\XPike.Logging.Tests.csproj", "{5D45309E-AC7F-4785-9BB5-0DE52BC1CF28}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XPike.Logging.Tests", "..\tests\XPike.Logging.Tests\XPike.Logging.Tests.csproj", "{5D45309E-AC7F-4785-9BB5-0DE52BC1CF28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net452", "net452", "{0C011964-BADB-4096-8D46-DF943247CC9D}"
 EndProject

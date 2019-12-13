@@ -23,8 +23,6 @@ namespace XPike.Logging
             if (dependencyCollection == null)
                 throw new ArgumentNullException(nameof(dependencyCollection));
 
-            dependencyCollection.LoadPackage(new XPike.Settings.Package());
-
             dependencyCollection.RegisterSingleton<IConsoleLogProvider, ConsoleLogProvider>();
             dependencyCollection.RegisterSingleton<IDebugLogProvider, DebugLogProvider>();
             dependencyCollection.RegisterSingleton<IFileLogProvider, FileLogProvider>();

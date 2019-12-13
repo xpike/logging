@@ -22,7 +22,7 @@ namespace XPikeLogging452
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            // Confiture the xPike DependencyProvider...
+            // Configure the xPike DependencyProvider...
             IDependencyProvider dependencyProvider = ConfigureServices();
 
             // Tell WebAPI to use xPike to resolve dependencies...
@@ -36,7 +36,6 @@ namespace XPikeLogging452
                     .Configure(GlobalConfiguration.Configuration);
 
             dependencyCollection.LoadPackage(new XPike.Configuration.System.Package())
-                .LoadPackage(new XPike.Settings.Package())
                 .LoadPackage(new XPike.Logging.Package())
                 .LoadPackage(new Example.Library.Package());
 

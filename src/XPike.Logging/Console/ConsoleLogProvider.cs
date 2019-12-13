@@ -13,39 +13,42 @@ namespace XPike.Logging.Console
     {
         protected static SemaphoreSlim Semaphore { get; }
 
-        protected virtual ConsoleLogSettings Settings { get; set; }
+        protected virtual IConfig<ConsoleLogConfig> Config { get; set; }
 
         static ConsoleLogProvider()
         {
             Semaphore = new SemaphoreSlim(1);
         }
 
-        public ConsoleLogProvider(IConfigurationService configService)
+        public ConsoleLogProvider(IConfigManager<ConsoleLogConfig> configManager)
         {
-            Settings = configService.GetValueOrDefault($"XPike.Logging::{nameof(ConsoleLogSettings)}",
-                new ConsoleLogSettings
-                {
-                    ShowMetadata = true,
-                    ShowStackTraces = true,
-                    Enabled = false
-                });
+            Config = configManager.GetConfigOrDefault(new ConsoleLogConfig
+            {
+                ShowMetadata = true,
+                ShowStackTraces = true,
+                Enabled = false
+            });
+        }
+
+        protected ConsoleLogProvider()
+        {
         }
 
         protected virtual string ConstructMessage(LogEvent logEvent)
         {
             var sb = new StringBuilder();
             
-            sb.Append($"[{logEvent.LogLevel}] {logEvent.Timestamp:M/d/yyyy hh:mm:ss.zz tt} - {logEvent.Message} ({logEvent.Category}::{logEvent.Location})");
+            sb.Append($"[{logEvent.LogLevel}] {logEvent.Timestamp:M/d/yyyy hh:mm:ss tt} - {logEvent.Message} ({logEvent.Category}::{logEvent.Location})");
 
             if (logEvent.Exception != null)
             {
                 sb.Append($"\r\n\tException Details: {logEvent.Exception.Message} ({logEvent.Exception.GetType().Name})");
 
-                if (Settings.ShowStackTraces)
+                if (Config.CurrentValue.ShowStackTraces)
                     sb.Append($"\r\nStack Trace:\r\n{logEvent.Exception}");
             }
 
-            if ((logEvent.Metadata?.Any() ?? false) && Settings.ShowMetadata)
+            if ((logEvent.Metadata?.Any() ?? false) && Config.CurrentValue.ShowMetadata)
             {
                 sb.Append("\r\n----------------------------------------");
 
@@ -64,12 +67,12 @@ namespace XPike.Logging.Console
 
             try
             {
-                if (!Settings.Enabled)
+                if (!Config.CurrentValue.Enabled)
                     return true;
 
                 var message = ConstructMessage(logEvent);
 
-                await Semaphore.WaitAsync();
+                await Semaphore.WaitAsync().ConfigureAwait(false);
                 captured = true;
 
                 var fg = cons.ForegroundColor;

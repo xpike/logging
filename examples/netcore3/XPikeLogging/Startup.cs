@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using XPike.IoC;
 using XPike.IoC.Microsoft.AspNetCore;
 using XPike.Logging.Microsoft.AspNetCore;
-using XPike.Settings.AspNetCore;
 
 namespace XPikeLogging
 {
@@ -23,14 +22,9 @@ namespace XPikeLogging
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddXPikeSettings();
-            //services.AddXPikeLogging();
 
             services.AddXPikeDependencyInjection()
                 .AddXPikeLogging()
-                //.AddXPikeConfiguration(xpike => xpike.AddProvider(new MicrosoftConfigurationProvider(Configuration)))
-                //.LoadPackage(new XPike.Logging.Package())
-                //.LoadPackage(new XPike.Settings.Package())
                 .LoadPackage(new Example.Library.Package());
         }
 
@@ -46,9 +40,7 @@ namespace XPikeLogging
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

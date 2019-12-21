@@ -122,11 +122,11 @@
       <Private>True</Private>
       <HintPath>..\..\..\src\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="XPike.Configuration, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\src\packages\XPike.Configuration.1.1.0\lib\net452\XPike.Configuration.dll</HintPath>
+    <Reference Include="XPike.Configuration, Version=1.1.6.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\src\packages\XPike.Configuration.1.1.6\lib\net452\XPike.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="XPike.Configuration.System, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\src\packages\XPike.Configuration.System.1.1.0\lib\net452\XPike.Configuration.System.dll</HintPath>
+    <Reference Include="XPike.Configuration.System, Version=1.1.6.1, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\src\packages\XPike.Configuration.System.1.1.6\lib\net452\XPike.Configuration.System.dll</HintPath>
     </Reference>
     <Reference Include="XPike.IoC, Version=1.0.3.17, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\src\packages\XPike.IoC.1.0.3\lib\net452\XPike.IoC.dll</HintPath>

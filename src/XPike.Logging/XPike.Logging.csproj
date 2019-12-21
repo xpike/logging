@@ -16,7 +16,7 @@
     <DefineConstants>NETFX</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="XPike.Configuration" Version="1.1.0" />
+    <PackageReference Include="XPike.Configuration" Version="1.1.6" />
   </ItemGroup>
 
 </Project>

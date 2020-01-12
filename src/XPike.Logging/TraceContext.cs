@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace XPike.Logging
 {
+    /// <summary>
+    /// NOTE: This implementation is not currently thread-safe when modifying the Items collection.
+    /// </summary>
     public class TraceContext
         : ITraceContext
     {

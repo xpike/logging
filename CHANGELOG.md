@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.2.0]
+
+- Added a few package registration extension methods
+- Added comments to extension methods
+- Pulled latest config package
+- Changed default Package registration to leave existing ILogProviders intact
+
+## [1.1.1]
+
+- Pulled latest config package
+
 ## [1.1.0]
 
 - Removed dependency on `XPike.Settings`.

@@ -12,7 +12,7 @@ namespace XPike.Logging.Microsoft
 
             dependencyCollection.RegisterSingleton<IMicrosoftLogProvider, MicrosoftLogProvider>();
 
-            dependencyCollection.ResetCollection<ILogProvider>();
+            //dependencyCollection.ResetCollection<ILogProvider>();
             dependencyCollection.AddSingletonToCollection<ILogProvider, IMicrosoftLogProvider>(services =>
                 services.ResolveDependency<IMicrosoftLogProvider>());
         }

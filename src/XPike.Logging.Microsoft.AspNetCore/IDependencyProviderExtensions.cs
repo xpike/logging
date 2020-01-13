@@ -7,9 +7,8 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <summary>
         /// Enables XPike Logging.
         ///
-        /// NOTE: You must also call ILoggingBuilderExtensions.AddXPikeLogging() or
-        /// ILoggingBuilderExtensions.UseXPikeLogging() from within a call to
-        /// IWebHostBuilder.ConfigureLogging() in Program.cs.
+        /// NOTE: You must also call either IHostBuilder.AddXPikeLogging() or
+        /// IHostBuilder.UseXPikeLogging() in Program.cs.
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

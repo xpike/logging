@@ -1,5 +1,4 @@
-﻿using System;
-using XPike.IoC;
+﻿using XPike.IoC;
 
 namespace XPike.Logging.Microsoft
 {
@@ -12,7 +11,6 @@ namespace XPike.Logging.Microsoft
 
             dependencyCollection.RegisterSingleton<IMicrosoftLogProvider, MicrosoftLogProvider>();
 
-            //dependencyCollection.ResetCollection<ILogProvider>();
             dependencyCollection.AddSingletonToCollection<ILogProvider, IMicrosoftLogProvider>(services =>
                 services.ResolveDependency<IMicrosoftLogProvider>());
         }

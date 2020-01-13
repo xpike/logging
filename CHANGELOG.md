@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.2.1]
+
+- Additional cleanup of registration/configuration extension methods
+
 ## [1.2.0]
 
 - Added a few package registration extension methods

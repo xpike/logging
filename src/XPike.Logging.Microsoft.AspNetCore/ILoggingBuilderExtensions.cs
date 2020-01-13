@@ -8,8 +8,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// Attaches XPike as a provider for Microsoft.Extensions.Logging so that it receives
         /// log entries such as those recorded using ILogger&lt;T&gt;.
         ///
-        /// NOTE: You must also call IDependencyProvider.UseXPikeLogging() in Startup.Configure(),
-        /// or set XPikeLoggerProvider.LogService to an instance of XPike's ILogService to be used.
+        /// NOTE: You should use IHostBuilder.AddXPikeLogging() instead.
         /// </summary>
         /// <param name="builder">The logging builder to attach XPike to as a provider.</param>
         /// <returns>The logging builder.</returns>
@@ -21,8 +20,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// Microsoft.Extensions.Logging so that it receives log entries such as those
         /// recorded using ILogger&lt;T&gt;.
         /// 
-        /// NOTE: You must also call IDependencyProvider.UseXPikeLogging() in Startup.Configure(),
-        /// or set XPikeLoggerProvider.LogService to an instance of XPike's ILogService to be used.
+        /// NOTE: You should use IHostBuilder.UseXPikeLogging() instead.
         /// </summary>
         /// <param name="builder">The logging builder to attach XPike to as a provider.</param>
         /// <returns>The logging builder.</returns>

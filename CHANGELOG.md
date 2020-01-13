@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.2.2]
+
+- Dual support for IHostBuilder and IWebHostBuilder
+
 ## [1.2.1]
 
 - Additional cleanup of registration/configuration extension methods

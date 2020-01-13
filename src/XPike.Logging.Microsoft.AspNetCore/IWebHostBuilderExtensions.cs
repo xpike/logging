@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 
 namespace XPike.Logging.Microsoft.AspNetCore
 {
     /// <summary>
-    /// NOTE: For .NET Core 2.2 and lower, use the IWebHostBuilder extension methods instead.
+    /// NOTE: For .NET Core 3 or higher, use the IHostBuilder extension methods instead.
     /// </summary>
-    public static class IHostBuilderExtensions
+    public static class IWebHostBuilderExtensions
     {
         /// <summary>
         /// Adds XPike Logging as a provider to Microsoft Extensions Logging.
@@ -15,7 +15,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IHostBuilder AddXPikeLogging(this IHostBuilder builder) =>
+        public static IWebHostBuilder AddXPikeLogging(this IWebHostBuilder builder) =>
             builder.ConfigureLogging(factory => factory.AddXPikeLogging());
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IHostBuilder AddXPikeMicrosoftLogging(this IHostBuilder builder) =>
+        public static IWebHostBuilder AddXPikeMicrosoftLogging(this IWebHostBuilder builder) =>
             builder.ConfigureServices((context, services) => services.AddXPikeMicrosoftLogging());
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IHostBuilder UseXPikeLogging(this IHostBuilder builder) =>
+        public static IWebHostBuilder UseXPikeLogging(this IWebHostBuilder builder) =>
             builder.ConfigureLogging(factory => factory.UseXPikeLogging());
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IHostBuilder UseMicrosoftLoggingForXPike(this IHostBuilder builder) =>
+        public static IWebHostBuilder UseMicrosoftLoggingForXPike(this IWebHostBuilder builder) =>
             builder.ConfigureServices((context, services) => services.UseMicrosoftLoggingForXPike());
     }
 }

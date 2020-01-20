@@ -16,7 +16,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <returns></returns>
         public static IServiceCollection UseMicrosoftLoggingForXPike(this IServiceCollection services)
         {
-            new MicrosoftDependencyCollection(services).UseMicrosoftLoggingForXPike();
+            new MicrosoftDependencyCollection(services, false, false).UseMicrosoftLoggingForXPike();
             return services;
         }
 
@@ -30,7 +30,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <returns></returns>
         public static IServiceCollection AddXPikeLogging(this IServiceCollection services)
         {
-            new MicrosoftDependencyCollection(services).AddXPikeLogging();
+            new MicrosoftDependencyCollection(services, false, false).AddXPikeLogging();
             return services;
         }
 
@@ -44,7 +44,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <returns></returns>
         public static IServiceCollection AddXPikeMicrosoftLogging(this IServiceCollection services)
         {
-            new MicrosoftDependencyCollection(services).AddXPikeMicrosoftLogging();
+            new MicrosoftDependencyCollection(services, false, false).AddXPikeMicrosoftLogging();
             return services;
         }
     }

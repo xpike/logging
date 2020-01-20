@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../common.build.props"/>
+  <Import Project="../common.build.props" />
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Description>xPike Logging provider for sending logs to Azure Application Insights</Description>
@@ -7,6 +7,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>

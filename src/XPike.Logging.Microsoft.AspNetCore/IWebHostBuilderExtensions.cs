@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace XPike.Logging.Microsoft.AspNetCore
 {
@@ -9,21 +12,23 @@ namespace XPike.Logging.Microsoft.AspNetCore
     {
         /// <summary>
         /// Adds XPike Logging as a provider to Microsoft Extensions Logging.
-        /// 
-        /// NOTE: You must also call IApplicationBuilder.AddXPikeLogging() or
-        /// IApplicationBuilder.UseXPikeLogging() in Startup.Configure().
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IWebHostBuilder AddXPikeLogging(this IWebHostBuilder builder) =>
-            builder.ConfigureLogging(factory => factory.AddXPikeLogging());
+        public static IWebHostBuilder AddXPikeLogging(this IWebHostBuilder builder, Action<ILoggingBuilder> logBuilder = null) =>
+            builder.ConfigureLogging(factory =>
+                {
+                    factory.AddXPikeLogging();
+                    logBuilder?.Invoke(factory);
+                })
+                .ConfigureServices((context, collection) =>
+                {
+                    collection.AddXPikeLogging();
+                    collection.AddSingleton<IStartupFilter, StartupFilter>();
+                });
 
         /// <summary>
         /// Adds Microsoft Extensions Logging as a provider to XPike Logging.
-        ///
-        /// NOTE: When using XPike Dependency Injection you should call
-        /// IDependencyCollection.AddXPikeMicrosoftLogging() in
-        /// Startup.ConfigureServices() instead.
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
@@ -33,22 +38,24 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <summary>
         /// Adds XPike Logging as the only provider for Microsoft Extensions Logging
         /// after removing any previously configured providers.
-        /// 
-        /// NOTE: You must also call IApplicationBuilder.AddXPikeLogging() or
-        /// IApplicationBuilder.UseXPikeLogging() in Startup.Configure().
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static IWebHostBuilder UseXPikeLogging(this IWebHostBuilder builder) =>
-            builder.ConfigureLogging(factory => factory.UseXPikeLogging());
+        public static IWebHostBuilder UseXPikeLogging(this IWebHostBuilder builder, Action<ILoggingBuilder> logBuilder = null) =>
+            builder.ConfigureLogging(factory =>
+                {
+                    factory.UseXPikeLogging();
+                    logBuilder?.Invoke(factory);
+                })
+                .ConfigureServices((context, collection) =>
+                {
+                    collection.AddXPikeLogging();
+                    collection.AddSingleton<IStartupFilter, StartupFilter>();
+                });
 
         /// <summary>
         /// Adds Microsoft Extensions Logging as the only provider for XPike Logging
         /// after removing any previously configured providers.
-        /// 
-        /// NOTE: When using XPike Dependency Injection you should call
-        /// IDependencyCollection.UseMicrosoftLoggingForXPike() in
-        /// Startup.ConfigureServices() instead.
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace XPike.Logging.Microsoft.AspNetCore
 {
     /// <summary>
-    /// A Microsoft.Exensions.Logging ILoggerProvider that  writes logs to the xPike Logging system.
+    /// A Microsoft.Exensions.Logging ILoggerProvider that writes logs to the xPike Logging system.
     /// Implements the <see cref="Microsoft.Extensions.Logging.ILoggerProvider" />
     /// </summary>
     /// <seealso cref="Microsoft.Extensions.Logging.ILoggerProvider" />

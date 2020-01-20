@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XPike.IoC;
-using XPike.IoC.Microsoft.AspNetCore;
-using XPike.Logging.Microsoft.AspNetCore;
 
 namespace XPikeLogging
 {
@@ -22,31 +19,19 @@ namespace XPikeLogging
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
-            services.AddXPikeDependencyInjection()
-                .AddXPikeLogging()
-                .LoadPackage(new Example.Library.Package());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseXPikeDependencyInjection()
-                .UseXPikeLogging();
-
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
 
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

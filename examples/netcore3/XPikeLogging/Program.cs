@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using XPike.Configuration.Microsoft.AspNetCore;
+using XPike.IoC;
+using XPike.IoC.Microsoft.AspNetCore;
 using XPike.Logging.Microsoft.AspNetCore;
 
 namespace XPikeLogging
@@ -14,14 +16,9 @@ namespace XPikeLogging
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(builder => { builder.UseXPikeLogging(); }) // NOTE: Call AddXPikeLogging() to preserve any configured NetCore providers.
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder
-                        //.ConfigureAppConfiguration(builder =>
-                        //    builder.ConfigureXPikeConfiguration(xpike => { }))
-                        .UseStartup<Startup>()
-                        .AddXPikeConfiguration(builder => { });
-                });
+                .UseXPikeLogging()
+                .UseXPikeConfiguration()
+                .AddXPikeDependencyInjection(collection => { collection.LoadPackage(new Example.Library.Package()); })
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

@@ -4,7 +4,7 @@ using System;
 namespace XPike.Logging.Microsoft.AspNetCore
 {
     /// <summary>
-    /// Extentions methods for ILoggerFactory to support xPike logging.
+    /// Extension methods for ILoggerFactory to support xPike logging.
     /// </summary>
     public static class ILoggerFactoryExtensions
     {

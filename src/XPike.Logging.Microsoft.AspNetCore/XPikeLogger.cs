@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions.Internal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using XPike.IoC;
 using XPike.IoC.Microsoft;
 
 namespace XPike.Logging.Microsoft.AspNetCore
@@ -19,7 +21,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <returns></returns>
         public static IApplicationBuilder UseXPikeLogging(this IApplicationBuilder builder)
         {
-            new MicrosoftDependencyProvider(builder.ApplicationServices).UseXPikeLogging();
+            builder.ApplicationServices.GetRequiredService<IDependencyProvider>().UseXPikeLogging();
             return builder;
         }
     }

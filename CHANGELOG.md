@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.3.0]
+
+- Updated to latest IoC and Configuration packages.
+- Simplified setup to a single call, similar to IoC and Configuration.
+
 ## [1.2.2]
 
 - Dual support for IHostBuilder and IWebHostBuilder

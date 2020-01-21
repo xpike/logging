@@ -25,7 +25,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
                 .ConfigureServices((context, collection) =>
                 {
                     collection.AddXPikeLogging();
-                    collection.AddSingleton<IStartupFilter, StartupFilter>();
+                    collection.AddSingleton<IStartupFilter, StartupFilter>(_ => new StartupFilter(true));
                 });
 
         /// <summary>
@@ -34,7 +34,11 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <param name="builder"></param>
         /// <returns></returns>
         public static IHostBuilder AddXPikeMicrosoftLogging(this IHostBuilder builder) =>
-            builder.ConfigureServices((context, services) => services.AddXPikeMicrosoftLogging());
+            builder.ConfigureServices((context, services) =>
+            {
+                services.AddXPikeMicrosoftLogging();
+                services.AddSingleton<IStartupFilter, StartupFilter>(_ => new StartupFilter(false));
+            });
 
         /// <summary>
         /// Adds XPike Logging as the only provider for Microsoft Extensions Logging
@@ -51,7 +55,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
                 .ConfigureServices((context, collection) =>
                 {
                     collection.AddXPikeLogging();
-                    collection.AddSingleton<IStartupFilter, StartupFilter>();
+                    collection.AddSingleton<IStartupFilter, StartupFilter>(_ => new StartupFilter(true));
                 });
 
         /// <summary>
@@ -61,6 +65,10 @@ namespace XPike.Logging.Microsoft.AspNetCore
         /// <param name="builder"></param>
         /// <returns></returns>
         public static IHostBuilder UseMicrosoftLoggingForXPike(this IHostBuilder builder) =>
-            builder.ConfigureServices((context, services) => services.UseMicrosoftLoggingForXPike());
+            builder.ConfigureServices((context, services) =>
+            {
+                services.UseMicrosoftLoggingForXPike();
+                services.AddSingleton<IStartupFilter, StartupFilter>(_ => new StartupFilter(false));
+            });
     }
 }

@@ -7,10 +7,21 @@ namespace XPike.Logging.Microsoft.AspNetCore
     public class StartupFilter
         : IStartupFilter
     {
+        private readonly bool _useXPikeLogging;
+
+        public StartupFilter(bool useXPikeLogging)
+        {
+            _useXPikeLogging = useXPikeLogging;
+        }
+
         public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next) =>
             builder =>
             {
-                builder.UseXPikeLogging();
+                if (_useXPikeLogging)
+                    builder.UseXPikeLogging();
+
+                builder.UseMiddleware<RequestLoggingMiddleware>();
+
                 next(builder);
             };
     }

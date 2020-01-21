@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.3.1]
+
+- Added request logging middleware
+
 ## [1.3.0]
 
 - Updated to latest IoC and Configuration packages.

@@ -22,5 +22,7 @@
         /// </summary>
         /// <value>The log level.</value>
         public LogLevel LogLevel { get; set; }
+
+        public bool EnableRequestLogging { get; set; }
     }
 }

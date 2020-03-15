@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,16 +8,19 @@ namespace XPike.Logging
     public class TraceContextProvider
         : ITraceContextProvider
     {
-        public IDictionary<string, string> Globals { get; protected set; } = new Dictionary<string, string>();
+        private readonly ConcurrentDictionary<string, string> _globals;
 
         public TraceContextProvider()
-            : this(new Dictionary<string, string>())
+            : this(new ConcurrentDictionary<string, string>())
         {
         }
 
         protected TraceContextProvider(IDictionary<string, string> globals)
         {
-            Globals = globals;
+            if (globals == null)
+                _globals = new ConcurrentDictionary<string, string>();
+            else
+                _globals =new ConcurrentDictionary<string, string>(globals);
 
             SetGlobal("UserName", Environment.UserName);
             SetGlobal("UserDomainName", Environment.UserDomainName);
@@ -31,10 +35,28 @@ namespace XPike.Logging
             SetGlobal("IpAddresses", $"Local={NetUtil.GetLocalIp()};Public={NetUtil.GetPublicIp()}");
         }
 
+        public IReadOnlyDictionary<string, string> Globals
+        {
+#if NETSTD || NET46 //as of net46, ConcurrentDictionary<,> implements IReadOnlyDictionary<,>
+            get => _globals;
+#else
+            get => new Dictionary<string, string>(_globals);
+#endif
+        } 
+
+        
         public ITraceContext CreateContext() =>
             new TraceContext(Globals.ToDictionary(x => x.Key, x => x.Value));
 
-        public void SetGlobal(string key, string value) =>
-            Globals[key] = value;
+        public void SetGlobal(string key, string value)
+        {
+            _globals.AddOrUpdate(key, value, (k, oldValue) => value);
+        }
+
+        public string GetGlobal(string key)
+        {
+            _globals.TryGetValue(key, out string value);
+            return value;
+        }
     }
 }

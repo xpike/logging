@@ -1,20 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../common.build.props" />
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net452;net46</TargetFrameworks>
     <Description>xPike Logging System</Description>
   </PropertyGroup>
 
   <!-- .NET Standard 2.0 references, compilation flags and build options -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>NETSTD</DefineConstants>
+    <DefineConstants>$(DefineConstants);NETSTD</DefineConstants>
   </PropertyGroup>
 
 
   <!-- .NET 4.5 references, compilation flags and build options -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net452'">
-    <DefineConstants>NETFX</DefineConstants>
+    <DefineConstants>$(DefineConstants);NETFX</DefineConstants>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
+    <DefineConstants>$(DefineConstants);NETFX;NET46</DefineConstants>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="XPike.Configuration" Version="1.3.1" />
   </ItemGroup>

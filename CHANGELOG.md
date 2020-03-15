@@ -1,5 +1,17 @@
 # Change Log
 
+## [2.0.0]
+
+### Breaking Changes
+
+- Interface changes to `ITraceContext` and `ITraceContextProvider` to make implementations thread-safe.
+  - `IDictionary<string,string>` has been replace with `IReadOnlyDictionary<string,string>`
+  - Thread-safe `GetXXXX(...)` methods were added. 
+
+### Bug Fixes
+
+- NetUtil is now thread-safe
+
 ## [1.3.1]
 
 - Added request logging middleware

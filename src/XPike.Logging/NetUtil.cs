@@ -7,27 +7,48 @@ namespace XPike.Logging
 {
     public static class NetUtil
     {
-        private static string _hostname = null;
-        private static string _localIp = null;
-        private static string _publicIp = null;
+        private static volatile string _hostname = null;
+        private static volatile string _localIp = null;
+        private static volatile string _publicIp = null;
 
-        public static string GetHostname() =>
-            _hostname ?? (_hostname = Dns.GetHostName());
+        private static readonly object _hostnameSync = new object();
+        private static readonly object _localIpSync = new object();
+        private static readonly object _publicIpSync = new object();
+
+        public static string GetHostname()
+        {
+            if (_hostname == null)
+            {
+                lock (_hostnameSync)
+                {
+                    if (_hostname == null)
+                        _hostname = Dns.GetHostName();
+                }
+            }
+
+            return _hostname;
+        }
 
         public static string GetLocalIp()
         {
             if (_localIp == null)
             {
-                try
+                lock (_localIpSync)
                 {
-                    _localIp = Dns.GetHostEntry(Dns.GetHostName())
-                        .AddressList
-                        .FirstOrDefault(address => address.AddressFamily == AddressFamily.InterNetwork)
-                        .ToString();
-                }
-                catch (Exception)
-                {
-                    _localIp = "0.0.0.0";
+                    if (_localIp == null)
+                    {
+                        try
+                        {
+                            _localIp = Dns.GetHostEntry(Dns.GetHostName())
+                                .AddressList
+                                .FirstOrDefault(address => address.AddressFamily == AddressFamily.InterNetwork)
+                                .ToString();
+                        }
+                        catch (Exception)
+                        {
+                            _localIp = "0.0.0.0";
+                        }
+                    }
                 }
             }
 
@@ -38,18 +59,24 @@ namespace XPike.Logging
         {
             if (_publicIp == null)
             {
-                try
+                lock (_publicIpSync)
                 {
-                    using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+                    if (_publicIp == null)
                     {
-                        socket.Connect("8.8.8.8", 65530);
-                        var endPoint = socket.LocalEndPoint as IPEndPoint;
-                        _publicIp = endPoint.Address.ToString();
+                        try
+                        {
+                            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+                            {
+                                socket.Connect("8.8.8.8", 65530);
+                                var endPoint = socket.LocalEndPoint as IPEndPoint;
+                                _publicIp = endPoint.Address.ToString();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            _publicIp = "0.0.0.0";
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    _publicIp = "0.0.0.0";
                 }
             }
 

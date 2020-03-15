@@ -6,8 +6,10 @@ namespace XPike.Logging
     {
         ITraceContext CreateContext();
 
-        IDictionary<string, string> Globals { get; }
+        IReadOnlyDictionary<string, string> Globals { get; }
 
         void SetGlobal(string key, string value);
+
+        string GetGlobal(string key);
     }
 }

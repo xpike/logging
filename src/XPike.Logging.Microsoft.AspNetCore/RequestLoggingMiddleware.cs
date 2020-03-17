@@ -12,12 +12,14 @@ namespace XPike.Logging.Microsoft.AspNetCore
         private readonly RequestDelegate _next;
         private readonly ILogService _logService;
         private readonly IConfig<LogServiceConfig> _config;
+        private readonly ITraceContextAccessor _contextAccessor;
 
-        public RequestLoggingMiddleware(RequestDelegate next, ILogService logService, IConfig<LogServiceConfig> config)
+        public RequestLoggingMiddleware(RequestDelegate next, ILogService logService, IConfig<LogServiceConfig> config, ITraceContextAccessor contextAccessor)
         {
             _next = next;
             _logService = logService;
             _config = config;
+            _contextAccessor = contextAccessor;
         }
 
         private Dictionary<string, string> GetTags(HttpContext context)
@@ -85,6 +87,17 @@ namespace XPike.Logging.Microsoft.AspNetCore
             var tags = GetTags(context);
             if (!tags.TryGetValue("path", out var path))
                 path = "(unknown)";
+
+            try
+            {
+                // NOTE: It's important to attempt to acquire the trace context here, otherwise
+                // trace items added by controller logic won't be recorded in these log entries.
+                var traceContext = _contextAccessor.TraceContext;
+            }
+            catch (Exception)
+            {
+                // Intentional no-op.
+            }
 
             _logService.Trace($"Begin request processing: {path}", tags, nameof(RequestLoggingMiddleware));
 

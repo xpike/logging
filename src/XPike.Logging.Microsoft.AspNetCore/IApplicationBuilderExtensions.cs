@@ -24,5 +24,8 @@ namespace XPike.Logging.Microsoft.AspNetCore
             builder.ApplicationServices.GetRequiredService<IDependencyProvider>().UseXPikeLogging();
             return builder;
         }
+
+        public static IApplicationBuilder UseXPikeRequestLoggingMiddleware(this IApplicationBuilder builder) =>
+            builder.UseMiddleware<RequestLoggingMiddleware>();
     }
 }

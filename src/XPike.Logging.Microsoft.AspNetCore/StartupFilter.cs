@@ -20,7 +20,7 @@ namespace XPike.Logging.Microsoft.AspNetCore
                 if (_useXPikeLogging)
                     builder.UseXPikeLogging();
 
-                builder.UseMiddleware<RequestLoggingMiddleware>();
+                builder.UseXPikeRequestLoggingMiddleware();
 
                 next(builder);
             };
